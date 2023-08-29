@@ -1,8 +1,27 @@
 const express = require('express')
 const app = express()
+const port = (process.env.PORT || 3000)
+
+app.set('view engine', 'ejs');
+
+let myVarServer = 'soft coded server'
+
+app.get('/temp', function (req, res) {
+  res.render('index', {
+    'myVarC' : myVarServer
+  });
+})
 
 app.get('/', function (req, res) {
   res.send('<h1>Hello World From Express & a PaaS/Render</h1>')
 })
 
-app.listen(3000)
+app.get('/whatever', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+})
+
+
+
+// app.listen(3000)
+
+app.listen(port,  () => console.log(`Server is running...on ${ port }`  ));
