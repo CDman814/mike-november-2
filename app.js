@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 4
 let myVariableServer = 'soft coded server data';
 
-app.get('/barry', function (req, res) {
+app.get('/curtis', function (req, res) {
   res.render('index', 
   {
     'myVariableClient' : myVariableServer 
