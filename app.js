@@ -1,16 +1,14 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const { ObjectId } = require('mongodb')
-
-const port = (process.env.PORT || 3000)
+const port = (process.env.PORT || 5500)
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://cdavidson160:loFa1XdXrY6bFOO1@cluster0.bzhzqq3.mongodb.net/?retryWrites=true&w=majority";
-
+const uri = process.env.MONGO_URI; 
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -21,26 +19,25 @@ const client = new MongoClient(uri, {
   }
 });
 
-// async function run() {
-//   try {
-//     // Connect the client to the server	(optional starting in v4.7)
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await client.close();
-//   }
-// }
-
-// run().catch(console.dir);
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+//run().catch(console.dir);
 
 async function cxnDB(){
 
   try{
     client.connect; 
-    const collection = client.db("mndb").collection("mncollection");
+    const collection = client.db("barrys-cool-papa-database").collection("dev-profiles");
     // const collection = client.db("papa").collection("dev-profiles");
     const result = await collection.find().toArray();
     //const result = await collection.findOne(); 
@@ -55,19 +52,21 @@ async function cxnDB(){
   }
 }
 
+
 app.get('/', async (req, res) => {
 
   let result = await cxnDB().catch(console.error); 
 
   // console.log("get/: ", result);
 
-  res.send("here for a second " + result[0].name);
+  res.send("here for a second: " + result[0].name)
   //res.render('index', {  peopleData : result })
 })
 
+
 let myVariableServer = 'soft coded server data';
 
-app.get('/curtis', function (req, res) {
+app.get('/barry', function (req, res) {
   res.render('index', 
   {
     'myVariableClient' : myVariableServer 
